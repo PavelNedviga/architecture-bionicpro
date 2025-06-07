@@ -63,6 +63,10 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
             # audience=KEYCLOAK_CLIENT_ID,
             issuer=ISSUER_URL,
         )
+        roles = payload.get("realm_access", {}).get("roles", [])
+        if "prothetic_user" not in roles:
+            raise HTTPException(status_code=403, detail="Insufficient role.")
+
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired.")
