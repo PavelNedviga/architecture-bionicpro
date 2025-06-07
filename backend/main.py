@@ -65,7 +65,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
         )
         roles = payload.get("realm_access", {}).get("roles", [])
         if "prothetic_user" not in roles:
-            raise HTTPException(status_code=403, detail="Insufficient role.")
+            raise HTTPException(status_code=401, detail="Insufficient role.")
 
         return payload
     except jwt.ExpiredSignatureError:
